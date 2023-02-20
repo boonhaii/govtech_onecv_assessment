@@ -3,7 +3,9 @@ package Controllers
 import (
 	"net/http"
 	"api/Models"
+	"api/Util"
 	"github.com/gin-gonic/gin"
+	"regexp"
 )
 
 func RegisterStudent(c *gin.Context) {
@@ -42,7 +44,7 @@ func CommonStudents(c *gin.Context) {
 
 	commonStudents := registeredStudents[0]
 	for _, studentList := range registeredStudents {
-		commonStudents = intersection(commonStudents, studentList)
+		commonStudents = Util.Intersection(commonStudents, studentList)
 	}
 
 	c.JSON(http.StatusOK, gin.H {
@@ -50,18 +52,28 @@ func CommonStudents(c *gin.Context) {
 	})
 }
 
-// To move to util file
-func intersection(s1, s2 []string) (res []string) {
-	hash := make(map[string]bool)
-	for _, e := range s1 {
-		hash[e] = true
+// Need to check if the student actually exists.
+func RetrieveStudentsForNotification(c *gin.Context) {
+	var input Models.RetrieveStudentsForNotificationInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H {"error": err.Error()})
 	}
 
-	for _, e := range s2 {
-		if hash[e] {
-			res = append(res, e)
-		}
-	}
+	teacher := Models.Teacher{ Email: input.T_email }
+	var toNotify []string
+	var suspended []string
+	Models.GetRegisteredStudents(&teacher, &toNotify)
+	Models.GetSuspendedStudents(&suspended)
 
-	return res
+	pattern := `\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b`
+	re := regexp.MustCompile(pattern)
+	tagged := re.FindAllString(input.Notification, -1)
+
+	toNotify = append(toNotify, tagged...)
+	toNotify = Util.Difference(toNotify, suspended)
+
+	c.JSON(http.StatusOK, gin.H {
+		"recipients": toNotify,
+	})
+
 }

@@ -10,6 +10,11 @@ type RegisterStudentInput struct {
 	Students []string `json:"students" binding:"required"`
 }
 
+type RetrieveStudentsForNotificationInput struct {
+	T_email string `json:"teacher" binding:"required"`
+	Notification string `json:"notification" binding:"required"`
+}
+
 func (Register) TableName() string {
 	return "Registers"
 }

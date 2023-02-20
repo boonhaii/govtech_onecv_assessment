@@ -34,3 +34,11 @@ func SuspendStudent(student *Student) (err error) {
 	}
 	return nil
 }
+
+func GetSuspendedStudents(suspended *[]string) (err error) {
+	var student Student
+	if err = Config.DB.Model(&student).Where("suspended = true").Pluck("email", suspended).Error; err != nil {
+		return err;
+	}
+	return nil
+}
