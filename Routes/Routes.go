@@ -30,7 +30,7 @@ func Setup() *gin.Engine {
 	router.POST("/api/register", Controllers.RegisterStudent)
 	
 	// // Route for retrieving common students between teachers (US.2)
-	// router.GET("/api/commonstudents", Controllers.commonStudents)
+	router.GET("/api/commonstudents", Controllers.CommonStudents)
 
 	// Route for teacher to suspend student (US.3)
 	router.POST("/api/suspend", Controllers.SuspendStudent)

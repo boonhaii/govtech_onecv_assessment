@@ -18,6 +18,7 @@ func RegisterStudent(c *gin.Context) {
 		err := Models.RegisterStudent(&teacher, &student)
 		if err != nil {
 			c.AbortWithStatus(http.StatusBadRequest)
+			return
 		}
 	}
 
