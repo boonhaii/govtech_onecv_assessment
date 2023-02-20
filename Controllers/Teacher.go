@@ -22,7 +22,7 @@ func GetTeachers(c *gin.Context) {
 func CreateTeacher(c *gin.Context) {
 	var input Models.CreateTeacherInput
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H {"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H {"message": err.Error()})
 	}
 	
 	teacher := Models.Teacher{Email: input.Email}
@@ -30,7 +30,7 @@ func CreateTeacher(c *gin.Context) {
 	err := Models.CreateTeacher(&teacher)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H {
-			"error": err.Error(),
+			"message": err.Error(),
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H {
@@ -43,14 +43,14 @@ func CreateTeacher(c *gin.Context) {
 func DeleteTeacher(c *gin.Context) {
 	var input Models.DeleteTeacherInput
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H {"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H {"message": err.Error()})
 	}
 	
 	teacher := Models.Teacher{Email: input.Email}
 	err := Models.DeleteTeacher(&teacher)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H {
-			"error": err.Error(),
+			"message": err.Error(),
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H { 
