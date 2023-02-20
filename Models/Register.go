@@ -20,3 +20,16 @@ func RegisterStudent(teacher *Teacher, student *Student) (err error) {
 
 	return nil
 }
+
+func GetRegisteredStudents(teacher *Teacher, s_emails *[]string) (err error) {
+	var registeredStudents []Register
+	if err = Config.DB.Model(&teacher).Where("email = ?", teacher.Email).Error; err != nil {
+		return err;
+	}
+
+	if err = Config.DB.Where("t_email = ?", teacher.Email).Find(&registeredStudents).Pluck("s_email", s_emails).Error; err != nil {
+		return err;
+	}
+	
+	return nil;
+}
