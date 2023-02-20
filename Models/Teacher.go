@@ -20,8 +20,8 @@ func CreateTeacher(teacher *Teacher) (err error) {
 }
 
 // No SQL Injection risk since Golang precompiles the db query, and injection cannot occur.
-func DeleteTeacher(teacher *Teacher, email string) (err error) {
-	if err = Config.DB.Where("email = ?", email).Delete(teacher).Error; err != nil {
+func DeleteTeacher(teacher *Teacher) (err error) {
+	if err = Config.DB.Where("email = ?", teacher.Email).Delete(teacher).Error; err != nil {
 		return err;
 	}
 	return nil

@@ -20,9 +20,13 @@ func GetStudents(c *gin.Context) {
 }
 
 func CreateStudent(c *gin.Context) {
-	var student Models.Student
-	c.BindJSON(&student)
-	fmt.Println(student)
+	var input Models.CreateStudentInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H {"error": err.Error()})
+	}
+	
+	student := Models.Student{Email: input.Email, Suspended: false}
+	
 	err := Models.CreateStudent(&student)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H {
@@ -37,23 +41,31 @@ func CreateStudent(c *gin.Context) {
 }
 
 func DeleteStudent(c *gin.Context) {
-	var student Models.Student
-	email := c.Params.ByName("email")
-	err := Models.DeleteStudent(&student, email)
+	var input Models.DeleteStudentInput
+	if  err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H {"error": err.Error()})
+	}
+
+	student := Models.Student{Email: input.Email}
+	err := Models.DeleteStudent(&student)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H {
 			"error": err,
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H { 
-			"message": fmt.Sprintf("Deletion of %s was successful", email),
+			"message": fmt.Sprintf("Deletion of %s was successful", input.Email),
 		})
 	}
 }
 
 func SuspendStudent(c *gin.Context) {
-	var student Models.Student
-	c.BindJSON(&student)
+	var input Models.SuspendStudentInput
+	if  err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H {"error": err.Error()})
+	}
+
+	student := Models.Student{Email: input.Email}
 	err := Models.SuspendStudent(&student)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H {

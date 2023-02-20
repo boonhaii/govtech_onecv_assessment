@@ -20,8 +20,13 @@ func GetTeachers(c *gin.Context) {
 }
 
 func CreateTeacher(c *gin.Context) {
-	var teacher Models.Teacher
-	c.BindJSON(&teacher) // Deserializes binary into struct.
+	var input Models.CreateTeacherInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H {"error": err.Error()})
+	}
+	
+	teacher := Models.Teacher{Email: input.Email}
+	
 	err := Models.CreateTeacher(&teacher)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H {
@@ -36,16 +41,20 @@ func CreateTeacher(c *gin.Context) {
 }
 
 func DeleteTeacher(c *gin.Context) {
-	var teacher Models.Teacher
-	email := c.Params.ByName("email")
-	err := Models.DeleteTeacher(&teacher, email)
+	var input Models.DeleteTeacherInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H {"error": err.Error()})
+	}
+	
+	teacher := Models.Teacher{Email: input.Email}
+	err := Models.DeleteTeacher(&teacher)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H {
 			"error": err,
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H { 
-			"message": fmt.Sprintf("Deletion of %s was successful", email),
+			"message": fmt.Sprintf("Deletion of %s was successful", input.Email),
 		})
 	}
 }

@@ -12,14 +12,14 @@ func Setup() *gin.Engine {
 	{
 		teachers.GET("", Controllers.GetTeachers)
 		teachers.POST("", Controllers.CreateTeacher)
-		teachers.DELETE("/:email", Controllers.DeleteTeacher)
+		teachers.DELETE("", Controllers.DeleteTeacher)
 	}
 
 	students := router.Group("/api/students")
 	{
 		students.GET("", Controllers.GetStudents)
 		students.POST("", Controllers.CreateStudent)
-		students.DELETE("/:email", Controllers.DeleteStudent)
+		students.DELETE("", Controllers.DeleteStudent)
 	}
 
 	router.GET("/", func (c *gin.Context) {
@@ -27,13 +27,12 @@ func Setup() *gin.Engine {
 	})
 
 	// Route for teacher to register student (US.1)
-	// router.POST("/api/register", Controllers.registerStudent)
+	router.POST("/api/register", Controllers.RegisterStudent)
 	
 	// // Route for retrieving common students between teachers (US.2)
 	// router.GET("/api/commonstudents", Controllers.commonStudents)
 
-	// // Route for teacher to suspend student (US.3)
-	// // Should be under Student Model.
+	// Route for teacher to suspend student (US.3)
 	router.POST("/api/suspend", Controllers.SuspendStudent)
 
 	// // Route for list of student involved in notification (US. 4)
