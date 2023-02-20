@@ -12,7 +12,7 @@ var err error
 func main() {
 	fmt.Println("Connecting to DB...")
 
-	Config.DB, err = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig())) // To setup MySQL DB.
+	Config.DB, err = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig("prod"))) // To setup MySQL DB.
 
 	if err != nil {
 		fmt.Println("Status: ", err)

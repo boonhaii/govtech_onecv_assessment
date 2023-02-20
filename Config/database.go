@@ -15,13 +15,24 @@ type DBConfig struct {
 	DB string
 }
 
-func BuildDBConfig() *DBConfig {
-	dbConfig := DBConfig {
-		ServerName: "localhost",
-		Port: 3306,
-		User: "root",
-		Password: "",
-		DB: "apidb",
+func BuildDBConfig(env string) *DBConfig {
+	var dbConfig DBConfig;
+	if (env == "prod") {
+		dbConfig = DBConfig {
+			ServerName: "localhost",
+			Port: 3306,
+			User: "root",
+			Password: "",
+			DB: "apidb",
+		}
+	} else if (env == "test") {
+		dbConfig = DBConfig {
+			ServerName: "localhost",
+			Port: 3306,
+			User: "root",
+			Password: "",
+			DB: "apidb_test",
+		}
 	}
 	
 	return &dbConfig
