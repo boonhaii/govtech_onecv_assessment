@@ -29,7 +29,7 @@ func Setup() *gin.Engine {
 	// Route for teacher to register student (US.1)
 	router.POST("/api/register", Controllers.RegisterStudent)
 	
-	// Route for retrieving common students between teachers (US.2)
+	// // Route for retrieving common students between teachers (US.2)
 	router.GET("/api/commonstudents", Controllers.CommonStudents)
 
 	// Route for teacher to suspend student (US.3)
