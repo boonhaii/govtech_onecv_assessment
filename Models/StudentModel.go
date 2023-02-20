@@ -6,15 +6,15 @@ type Student struct {
 }
 
 type CreateStudentInput struct {
-	Email string `json:"email" binding:"required"`
+	Email string `json:"student" binding:"required"`
 }
 
 type DeleteStudentInput struct {
-	Email string `json:"email" binding:"required"`
+	Email string `json:"student" binding:"required"`
 }
 
 type SuspendStudentInput struct {
-	Email string `json:"email" binding:"required"`
+	Email string `json:"student" binding:"required"`
 }
 
 func (Student) TableName() string {

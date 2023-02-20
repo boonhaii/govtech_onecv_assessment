@@ -11,7 +11,7 @@ func GetStudents(c *gin.Context) {
 	var student []Models.Student
 	err := Models.GetAllStudents(&student)
 	if err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusNotFound, gin.H { "message": err.Error()})
 	} else {
 		c.JSON(http.StatusOK, gin.H {
 			"data": student,
@@ -30,7 +30,7 @@ func CreateStudent(c *gin.Context) {
 	err := Models.CreateStudent(&student)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H {
-			"error": "Another student with the same email already exists!",
+			"error": err.Error(),
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H {
@@ -43,14 +43,14 @@ func CreateStudent(c *gin.Context) {
 func DeleteStudent(c *gin.Context) {
 	var input Models.DeleteStudentInput
 	if  err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H {"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H {"message": err.Error()})
 	}
 
 	student := Models.Student{Email: input.Email}
 	err := Models.DeleteStudent(&student)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H {
-			"error": err,
+			"error": err.Error(),
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H { 
@@ -62,14 +62,14 @@ func DeleteStudent(c *gin.Context) {
 func SuspendStudent(c *gin.Context) {
 	var input Models.SuspendStudentInput
 	if  err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H {"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H {"message": err.Error()})
 	}
 
 	student := Models.Student{Email: input.Email}
 	err := Models.SuspendStudent(&student)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H {
-			"error": "Student does not exist!",
+			"message": err.Error(),
 		})
 	} else {
 		c.Status(http.StatusNoContent)

@@ -30,7 +30,7 @@ func CreateTeacher(c *gin.Context) {
 	err := Models.CreateTeacher(&teacher)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H {
-			"error": "Another teacher with the same email already exists!",
+			"error": err.Error(),
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H {
@@ -50,7 +50,7 @@ func DeleteTeacher(c *gin.Context) {
 	err := Models.DeleteTeacher(&teacher)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H {
-			"error": err,
+			"error": err.Error(),
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H { 

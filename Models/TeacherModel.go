@@ -5,11 +5,11 @@ type Teacher struct {
 }
 
 type CreateTeacherInput struct {
-	Email string `json:"email" binding:"required"`
+	Email string `json:"teacher" binding:"required"`
 }
 
 type DeleteTeacherInput struct {
-	Email string `json:"email" binding:"required"`
+	Email string `json:"teacher" binding:"required"`
 }
 
 func (Teacher) TableName() string {
